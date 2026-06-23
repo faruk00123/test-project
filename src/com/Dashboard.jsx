@@ -92,7 +92,45 @@ const Dashboard = () => {
   const reject = () => {
     setIsRaning(false)
     setTime(0)
+    setMinute(0)
+    setHour(0)
   }
+
+
+
+  // form 
+  const [value, setValue] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [error, setError] = useState('')
+  const {name, email, message} = value;
+
+  const FormSubmite = (e) => {
+    e.preventDefault()
+
+    if(FormValidet()){
+      alert(`Form Submited ${name}`)
+    }
+  }
+
+  const FormValidet = ()=> {
+    const NewError = {}
+
+    if(!name.trim()){
+      NewError.name = 'Name is required'
+    }
+    if(!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      NewError.email = 'Email is required'
+    }
+    if(!message.trim()){
+      NewError.message = 'Email is required'
+    }
+    setError(NewError)
+    return ()=> Object.keys(NewError).length === 0;
+  }
+  
   return (
     <div className='container gap-6 mx-auto grid grid-cols-1 mt-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
       <form onSubmit={dataSearch} className='flex flex-col bg-cyan-100 justify-center items-center'>
@@ -122,6 +160,30 @@ const Dashboard = () => {
           <button onClick={stop} className='bg-blue-500 py-1 px-2 rounded cursor-pointer'>Stop</button>
           <button onClick={reject} className='bg-red-500 py-1 px-2 rounded cursor-pointer'>Reject</button>
         </div>
+      </div>
+      <div>
+        <form onSubmit={FormSubmite} className='flex flex-col space-y-1'>
+          <h1 className='m-auto border-b border-b-pink-500 w-23 mb-2'>Form Submit</h1>
+          <label className='text-xl font-semibold'>Name</label>
+          <input value={value.name} onChange={(e)=> setValue({...value, name: e.target.value})} className='border-b border-b-pink-600 focus:outline-none p-1 mt-1' type="text" name='name' placeholder='Enter your name'/>
+          {
+            error.name && <p className='text-sm ml-0.2 text-red-500'>{error.name}</p>
+          }
+
+          <label className='text-xl font-semibold'>Email</label>
+          <input value={value.email} onChange={(e) => setValue({...value, email: e.target.value})} className='border-b border-b-pink-600 focus:outline-none p-1 mt-1' type="email" name='email' placeholder='Enter your email'/>
+          {
+            error.email && <p className='text-sm ml-0.2 text-red-500'>{error.email}</p>
+          }
+
+          <label className='text-xl font-semibold'>Message</label>
+          <textarea value={value.message} onChange={(e) => setValue({...value, message: e.target.value})} placeholder='Enter your message' className='focus:outline-none mt-1 resize-none border-b border-b-pink-600' name="messag"></textarea>
+          {
+            error.message && <p className='text-sm ml-0.2 text-red-500'>{error.message}</p>
+          }
+          
+          <button className='bg-blue-500 py-1 cursor-pointer' type='submit'>Submit</button>
+        </form> 
       </div>
     </div>
   )
